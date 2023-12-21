@@ -1,0 +1,87 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Home</li>
+<li class="breadcrumb-item active">Views</li>
+<li class="breadcrumb-item active">company Views</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="row card-header" style="background-color:white;">
+            <div class='col-12'>
+            <strong> Registered Company</strong>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>City</th>
+                        <th>Found Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                <tr>
+                    <td>{{company.name}}</td>
+                    <td>{{company.email}}</td>
+                    <td>{{company.city}}</td>
+                    <td>{{company.found_date}}<td>
+                    <td><a href="{% url 'register_app:company_update' company.id %}">Update</a></td>
+                    {% comment %} <td><a href="{% url 'register_app:company_delete' company.id %}" style='color:red;'>delete</a></td> {% endcomment %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+          </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+{% comment %} 
+{% extends 'base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Home</li>
+<li class="breadcrumb-item">Projects</li>
+<li class="breadcrumb-item active">Views</li>
+<li class="breadcrumb-item active">Tasks iews</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <strong>{{ companies.count }} Companies </strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for company in companies %}
+                <div class="col-12 col-md-6 col-lg-4">
+                <div class="card mx-2">
+                    <div class="card-body">
+                        <div>{{company.name }}</div>
+                        <div><a href="{% url 'register_app:company_update' company.id %}">Edit</a></div>
+                        <div><a href="{% url 'register_app:company_delete' company.id %}" style='color:red;'>delete</a></div>
+                        <small class="text-muted">{{ company.description|truncatechars:40 }}</small>
+                    </div>
+                </div>
+                </div>
+                {% endfor %}
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %} {% endcomment %}

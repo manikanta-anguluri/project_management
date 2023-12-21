@@ -1,0 +1,33 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">Company</li>
+        <li class="breadcrumb-item active">{{objects.name}}</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+ 
+<div class="container  text-center">
+<h4>{{objects.name}}</h4>
+<form method="POST">
+  <div class="row">
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="form-group col-4">
+    <label class="col-12">{{ field.label }}</label>
+    {{ field }}
+</div>
+{% endfor %} 
+</div>
+  <button class="btn btn-primary" type="submit" style="border-radius:5px;">update</button>
+   
+</form>
+</div>
+
+
+{% endblock %}

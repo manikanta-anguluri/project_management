@@ -1,0 +1,128 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Home</li>
+<li class="breadcrumb-item active">Views</li>
+<li class="breadcrumb-item active">Tasks views</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="row card-header" style="background-color:white;">
+            <div class='col-8'>
+            <strong>{{ tasks.count }} Tasks</strong>
+            </div>
+            <div class="col-4 text-right">
+                {% if user.is_superuser%}
+            <a class="btn btn-primary py-0" href="{% url 'project_management_app:new-task'%}" style="text-decoration:none;border-radius:15px;">New Task</a>
+            {%endif%}
+            </div>
+        </div>
+        <div class="container-fluid">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Status</th>
+                        <th>Type</th>
+                        <th>Priority</th>
+                        <th>Project</th>
+                        <th>Assigned to</th>
+                        <th>Expected Start Date</th>
+                        <th>Expected End Date</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{task.task_name|truncatechars:12}}</td>
+                    <td>
+                        {% if task.status == '1' %}
+                        <p>Open</p>
+                        {% elif task.status == '2' %}
+                        <p>Completed</p>
+                        {% else %}
+                        <p>Cancelled</p>
+                        {% endif %}
+                    </td>
+                    <td>{% if task.status == '1' %}
+                        <p>internal</p>
+                        {% else %}
+                        <p>external</p>
+                        {% endif %}
+                    </td>
+                    <td>{% if task.status == '1' %}
+                        <p>medium</p>
+                        {% elif task.status == '2' %}
+                        <p>low</p>
+                        {% else %}
+                        <p>high</p>
+                        {% endif %}
+                    </td>
+                    <td>{{task.project|truncatechars:20}}</td>
+                    <td>{{task.assign}}</td>
+                    <td>{{task.expected_start_date}}</td>
+                    <td>{{task.expected_end_date}}</td>
+                    <td>{{task.description|truncatechars:5}}</td>
+                    {% if user.is_superuser%}
+                    <td><a href="{% url 'project_management_app:task_update' task.id %}">update</a></td>
+                   
+                    <td><a href="{% url 'project_management_app:task_delete' task.id %}" style='color:red;'>delete</a></td>
+                    {%endif%}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+          </div>
+    </div>
+</div>
+{%if user.is_superuser%}
+<div class="container" style="width:600px;">
+<canvas id="chart" width="500" height="500"></canvas>
+</div>
+{%endif%}
+
+{% endblock %}
+
+{%block javascript%}
+     
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+
+<script>
+    let ctx = document.getElementById("chart").getContext("2d");
+    
+    let chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+         labels: ["open","completed","cancelled"],
+         datasets: [
+            {
+            label: "tasks",
+              backgroundColor: [
+                'blue','green','red'
+              ],
+              borderColor: "#417690",
+              data: [{{open.count}},{{completed.count}},{{cancelled.count}}]
+            }
+         ]
+      },
+      options: {
+          scales: {
+            xAxes: [{
+              display: true
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+    });
+    </script>
+
+{%endblock%}

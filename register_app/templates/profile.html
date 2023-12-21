@@ -1,0 +1,44 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">profile</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                        <img src="{{ request.user.userprofile.img.url }}" class="img-avatar m-4" width="20%">
+                        <br>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                         {% csrf_token %}
+                          <div class="custom-file col-md-4">
+                            {{form.img}}
+                            <button class="btn btn-primary btn-sm my-2" type="submit">Update</button>
+                          </div>
+                         </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="social-box">
+              
+                <ul>
+                    <li><span>Name: <a href="">{{ request.user.first_name }}</a></span></li>
+                    <li><span>e-mail: <span class="text-blue text-lowercase">{{ request.user.email }}</span></span>
+                    </li>
+                </ul>
+                <ul>
+                    <li><span>Date joined: <span class="text-blue">{{ request.user.date_joined }}</span></span></li>
+                    <li><span>Last login: <span class="text-blue">{{ request.user.last_login }}</span></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
